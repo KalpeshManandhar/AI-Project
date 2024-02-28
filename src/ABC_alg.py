@@ -83,7 +83,6 @@ class OnlookerBee:
     def __init__(self) -> None:
         self.role = "onlooker"
 
-    # TODO: implement 
     def choose_source(self) -> int:
         # utility (error) LOW -> fit value HIGH -> probability HIGH
         utility_values = np.apply_along_axis(utility, 1, food_sources)
@@ -99,7 +98,7 @@ class OnlookerBee:
         # choose the occurence with max value
         return actual_occurence.argmax()
     
-    
+
     def search_better_source(self):
         # choose a source 
         chosen_source_index = self.choose_source()

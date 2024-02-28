@@ -4,9 +4,13 @@ from math import exp;
 import numpy as np;
 
 
+def Himmelblau_Function(x,y):
+    return ((x**2 + y - 11)**2 + (x + y**2 - 7)**2)
 
-# test function
-minima = [2,-3,1,0,0]
+def himmelblau_fit(food_source):
+    return exp(-abs(Himmelblau_Function(food_source[0], food_source[1])))
+
+
 def error_func(food_source):
     food_source = food_source + np.array([-2,3,-1,0,0])
     return np.dot(food_source, food_source)
@@ -17,7 +21,7 @@ def fit_func(food_source):
 def main():
     LIMIT = 100
     N_SOURCES = 50
-    N_PARAMS = 5
+    N_PARAMS = 2
     MAX_ITERATIONS = 1000
     SOLUTION_RANGE = (-50,50)
     
@@ -26,7 +30,7 @@ def main():
                      SOLUTION_RANGE[0], SOLUTION_RANGE[1],
                      MAX_ITERATIONS)    
 
-    abc.setFitFunction(fit_func)
+    abc.setFitFunction(himmelblau_fit)
 
     print(abc.solve())
 
