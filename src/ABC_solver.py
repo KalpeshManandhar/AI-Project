@@ -27,16 +27,18 @@ class ABC_solver:
         pass
 
     
+    # set the function used to calculate the fit value of a solution
+    # (amount of nectar of the source)
     def setFitFunction(self, fitFunc):
         self.fitFunc = fitFunc
 
 
-
+    # equivalent to having a scout bee find a new source
     def get_random_food_source(self) -> np.array:
         return self.rng.random(self.N_PARAMS) * (self.solution_range[1] - self.solution_range[0]) + self.solution_range[0]
 
     
-    
+    # search for better solution in local space of given solution
     def try_find_better_source(self, current_food_source) -> np.array:
         # get a random food source from the list
         random_food_source_index = self.rng.integers(self.N_SOURCES, size=1)[0]
@@ -105,11 +107,18 @@ class ABC_solver:
 
 
     # returns the solution with the max fit value
-    def solve(self) -> np.array:
-        for _ in range(0, self.MAX_ITERATIONS):
+    # intermediate values at adds the sources value at each step included
+    def solve(self, intermediate_values_at: list = []):
+        intermediates = np.zeros((len(intermediate_values_at), self.N_SOURCES, self.N_PARAMS))
+        intermediate_index = 0
+
+        for i in range(0, self.MAX_ITERATIONS):
             self.one_cycle()
+            if (intermediate_values_at.count(i) > 0):
+                intermediates[intermediate_index] = np.copy(self.food_sources)
 
         
         fit_values = np.apply_along_axis(self.fitFunc, 1, self.food_sources)
         max_fit_index = fit_values.argmax()
-        return self.food_sources[max_fit_index]
+
+        return (self.food_sources[max_fit_index], intermediates)
