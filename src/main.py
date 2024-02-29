@@ -19,11 +19,12 @@ def error_func(food_source):
 def fit_func(food_source):
     return exp(-abs(error_func(food_source)))
 
-def main():
-    LIMIT = 100
+def main():    
     N_SOURCES = 50
     N_PARAMS = 2
     MAX_ITERATIONS = 1000
+    # Setting Limit as per norms
+    LIMIT = N_SOURCES*N_PARAMS/2
     SOLUTION_RANGE = (-6,6)
 
     INTERMEDIATES = [0,50,100,250,500,700,950]
