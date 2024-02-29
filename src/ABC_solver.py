@@ -14,6 +14,9 @@ class ABC_solver:
         
         self.solution_range = (sol_range_low, sol_range_high)
         
+        self.bestSolutionIndex = 0
+        self.bestSolutionFit = 0
+
         # rng 
         self.rng = np.random.default_rng();
 
@@ -81,10 +84,15 @@ class ABC_solver:
             # find new source near current source
             new_source = self.try_find_better_source(self.food_sources[i])
 
+            new_fit = self.fitFunc(new_source)
             # if new source is better, replace
-            if self.fitFunc(new_source) > self.fitFunc(self.food_sources[i]):
+            if new_fit > self.fitFunc(self.food_sources[i]):
                 self.food_sources[i] = new_source
                 self.no_of_visits[i] = 0
+                if new_fit > self.bestSolutionFit:
+                    self.bestSolutionFit = new_fit
+                    self.bestSolutionIndex = i
+
             # if not, keep the current source
             else:
                 self.no_of_visits[i] += 1
@@ -119,11 +127,16 @@ class ABC_solver:
     def solve(self, intermediate_values_at: list = []):
         intermediates = np.zeros((len(intermediate_values_at), self.N_SOURCES, self.N_PARAMS))
         intermediate_index = 0
+        add_intermediates = True
+        if len(intermediate_values_at) == 0:
+            add_intermediates = False
 
         for i in range(0, self.MAX_ITERATIONS):
             self.one_cycle()
-            if (intermediate_values_at.count(i) > 0):
+            print(f'Cycle: {i} Best fit: {self.bestSolutionFit}')
+            if (add_intermediates and intermediate_values_at.count(i) > 0):
                 intermediates[intermediate_index] = np.copy(self.food_sources)
+                intermediate_index += 1
 
         
         fit_values = np.apply_along_axis(self.fitFunc, 1, self.food_sources)
