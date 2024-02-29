@@ -24,7 +24,7 @@ class ABC_solver:
             self.food_sources.append(self.get_random_food_source())
 
 
-        pass
+        
 
     
     # set the function used to calculate the fit value of a solution
@@ -34,6 +34,7 @@ class ABC_solver:
 
 
     # equivalent to having a scout bee find a new source
+    # Generates random values between the solution range
     def get_random_food_source(self) -> np.array:
         return self.rng.random(self.N_PARAMS) * (self.solution_range[1] - self.solution_range[0]) + self.solution_range[0]
 
@@ -41,8 +42,14 @@ class ABC_solver:
     # search for better solution in local space of given solution
     def try_find_better_source(self, current_food_source) -> np.array:
         # get a random food source from the list
-        random_food_source_index = self.rng.integers(self.N_SOURCES, size=1)[0]
+        #Returns an intex ranging from 0 to N_sources
+        random_food_source_index = self.rng.integers(self.N_SOURCES, size=1)[0]         
         random_food_source = self.food_sources[random_food_source_index]
+
+        # If the current_food_source is equal to random_food_source generated, choose another random partner
+        while np.array_equal(random_food_source, current_food_source):
+            random_food_source_index = self.rng.integers(self.N_SOURCES, size=1)[0]
+            random_food_source = self.food_sources[random_food_source_index]        
         
         # a random value in range [-1,1]
         multiplier = 2 * self.rng.random(1) - 1
@@ -55,6 +62,7 @@ class ABC_solver:
     
     def choose_source(self) -> int:
         # fit value HIGH -> probability HIGH
+        # Applying fitFuc rowWise
         fit_values = np.apply_along_axis(self.fitFunc, 1, self.food_sources)
 
         sum_fit = fit_values.sum()
