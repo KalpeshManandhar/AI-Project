@@ -20,9 +20,10 @@ def fit_func(food_source):
     return exp(-abs(error_func(food_source)))
 
 
-N_NODES = 5
+N_NODES = 15
 N_RADIUS_MAX = 75
 N_RADIUS_MIN = 20
+GRID_UNIT = 5
 
 node_radii = np.random.random(N_NODES) * (N_RADIUS_MAX - N_RADIUS_MIN) + N_RADIUS_MIN
 graph = np.zeros((50,50))
@@ -35,9 +36,9 @@ def circleOverlap(c1, r1, c2, r2):
     return dSq < (r1 + r2) * (r1 + r2)
 
 def plot_coverage(c,r):
-    for i in range(max(int((c[0] - r)/5), 0), min(int((c[0] + r)/5), 49)):
-        for j in range(max(0,int((c[1] - r)/5)), min(49,int((c[1] + r)/5))):
-            if ((i * 5)*(i * 5) + (j*j*5*5) < r*r):
+    for i in range(max(int((c[0] - r)/GRID_UNIT), 0), min(int((c[0] + r)/GRID_UNIT), 49)):
+        for j in range(max(0,int((c[1] - r)/GRID_UNIT)), min(49,int((c[1] + r)/GRID_UNIT))):
+            if ((i * GRID_UNIT)*(i * GRID_UNIT) + (j*j*GRID_UNIT*GRID_UNIT) < r*r):
                 graph[i][j] = 1
 
 def node_connectivity(solution):
@@ -69,11 +70,13 @@ def node_connectivity(solution):
             p2 = [solution[j*2], solution[j*2+1]]
             if circleOverlap(p1, node_radii[i], p2, node_radii[j]):
                 n_connections += 1
+                break
 
-    n_connectivity = graph.sum()
-    return n_connections * 1.5 + n_connectivity
+    n_coverage = graph.sum()
+    return n_connections * 1.5 + n_coverage * 2
 
-
+def node_coverage():
+    return graph.sum()
 
 def plot(solution):
     x = np.linspace(-250, 250, num=50)
@@ -83,19 +86,17 @@ def plot(solution):
     f, a = plt.subplots()
     # a = plt.gca()
     for i in range(0, N_NODES):
-        c = plt.Circle((solution[2*i], solution[2*i+1]), node_radii[i], color = "r")
+        c = plt.Circle((solution[2*i], solution[2*i+1]), node_radii[i], color = "r", alpha= 0.5)
         a.add_artist(c)
 
     plt.show()
 
 
-
-
 def main():
     LIMIT = 100
-    N_SOURCES = 50
+    N_SOURCES = 30
     N_PARAMS = N_NODES * 2
-    MAX_ITERATIONS = 100
+    MAX_ITERATIONS = 500
     SOLUTION_RANGE = (-250,250)
 
     INTERMEDIATES = [0,50,100,250,500,700,950]
@@ -115,7 +116,7 @@ def main():
     plot(solution)
 
 
-    return 
+    # return 
     # plot
 
     X= np.linspace(-6,6)    # returns an array of evenly spaced values with in the specified interval
