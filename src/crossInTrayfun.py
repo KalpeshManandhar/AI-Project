@@ -72,6 +72,7 @@ def plot(solution, intermediates):
     ax.set_xlabel('Y')
     ax.set_zlabel('F')
     ax.set_title('Cross-In-Tray Function')
+    ax.text(solution[0], solution[1],crossInTray(solution[0], solution[1]) ,f'Minimum Value: {crossInTray(solution[0], solution[1]):.2f}', color='black')
 
     plt.show()
 
