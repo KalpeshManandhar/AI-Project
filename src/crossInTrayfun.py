@@ -30,7 +30,7 @@ def main():
     N_SOURCES = 100
     N_PARAMS = 2
     MAX_ITERATIONS = 1000
-    SOLUTION_RANGE = (0.5,1)
+    SOLUTION_RANGE = (-10,10)
 
     INTERMEDIATES = [0,50,100,250,500,700,950]
     
