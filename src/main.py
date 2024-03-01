@@ -93,16 +93,10 @@ def plot(solution):
 
 def main():
     LIMIT = 100
-def main():    
     N_SOURCES = 50
     N_PARAMS = N_NODES * 2
     MAX_ITERATIONS = 100
     SOLUTION_RANGE = (-250,250)
-    N_PARAMS = 2
-    MAX_ITERATIONS = 1000
-    # Setting Limit as per norms
-    LIMIT = N_SOURCES*N_PARAMS/2
-    SOLUTION_RANGE = (-6,6)
 
     INTERMEDIATES = [0,50,100,250,500,700,950]
     
