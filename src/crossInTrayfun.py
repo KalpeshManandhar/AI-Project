@@ -22,7 +22,7 @@ def crossInTray(x1, x2):
 
 
 def crossInTrayFit(food_source):
-    return exp(-crossInTray(food_source[0], food_source[1]))
+    return exp(-(crossInTray(food_source[0], food_source[1])))
 
 
 def main():
@@ -30,7 +30,7 @@ def main():
     N_SOURCES = 100
     N_PARAMS = 2
     MAX_ITERATIONS = 1000
-    SOLUTION_RANGE = (0.5,1)
+    SOLUTION_RANGE = (-10,10)
 
     INTERMEDIATES = [0,50,100,250,500,700,950]
     
@@ -54,8 +54,8 @@ def plot(solution, intermediates):
     F = crossInTray(x,y)
 
     fig = plt.figure(figsize=[10, 8])
-    ax = fig.add_subplot(111, projection='3d')
-    ax.plot_surface(x, y, F, cmap='viridis')
+    ax = plt.axes(projection = '3d')
+    ax.contour3D(x, y, F, 450)
 
     for slns in intermediates:
         xy = np.transpose(slns)
@@ -72,6 +72,7 @@ def plot(solution, intermediates):
     ax.set_xlabel('Y')
     ax.set_zlabel('F')
     ax.set_title('Cross-In-Tray Function')
+    ax.text(solution[0], solution[1],crossInTray(solution[0], solution[1]) ,f'Minimum Value: {crossInTray(solution[0], solution[1]):.2f}', color='black')
 
     plt.show()
 

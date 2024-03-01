@@ -54,6 +54,7 @@ def plot(solution, intermediates):
     ax.set_xlabel('Y')
     ax.set_zlabel('F')
     ax.set_title('Himmelblau Function')
+    ax.text(solution[0], solution[1],Himmelblau_Function(solution[0], solution[1]) ,f'Minimum Value: {Himmelblau_Function(solution[0], solution[1]):.2f}', color='black')
 
 
     plt.show()

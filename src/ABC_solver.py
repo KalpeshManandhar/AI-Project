@@ -17,7 +17,7 @@ class ABC_solver:
         self.bestSolutionFit = 0
 
         # rng 
-        self.rng = np.random.default_rng();
+        self.rng = np.random.default_rng()
 
         # sources and no of visits to each
         self.food_sources = []
@@ -73,7 +73,7 @@ class ABC_solver:
         probability_values = fit_values/sum_fit 
         
         # multiply probability with random values 
-        random_values = self.rng.random(self.N_SOURCES);
+        random_values = self.rng.random(self.N_SOURCES)
         actual_occurence = probability_values * random_values
 
         # choose the occurence with max value
