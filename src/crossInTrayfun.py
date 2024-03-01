@@ -13,10 +13,6 @@ from math import exp;
 
 from ABC_solver import ABC_solver;
 
-N_NODES = 5
-N_RADIUS_MAX = 75
-N_RADIUS_MIN = 20
-
 
 def crossInTray(x1, x2):
     a = np.fabs(100 - np.sqrt(x1*x1 + x2*x2)/np.pi)
@@ -26,13 +22,13 @@ def crossInTray(x1, x2):
 
 
 def crossInTrayFit(food_source):
-    return exp(-abs(crossInTray(food_source[0], food_source[1])))
+    return exp(-crossInTray(food_source[0], food_source[1]))
 
 
 def main():
     LIMIT = 100
     N_SOURCES = 100
-    N_PARAMS = N_NODES * 2
+    N_PARAMS = 2
     MAX_ITERATIONS = 1000
     SOLUTION_RANGE = (0.5,1)
 
@@ -46,7 +42,7 @@ def main():
     abc.setFitFunction(crossInTrayFit)
 
     (solution, intermediates)= abc.solve(INTERMEDIATES)
-
+    print(solution, crossInTray(solution[0], solution[1]))
     plot(solution, intermediates)
 
 
