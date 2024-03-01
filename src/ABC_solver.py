@@ -1,6 +1,5 @@
 import numpy as np;
 
-
 class ABC_solver:
     def __init__(self, limit, n_sources, n_params,
                  sol_range_low, sol_range_high,
@@ -59,7 +58,9 @@ class ABC_solver:
 
         # try to find a new source better than the current one
         new_food_source = current_food_source + multiplier * random_food_source
-
+        
+        new_food_source = np.maximum(new_food_source, self.solution_range[0])
+        new_food_source = np.minimum(new_food_source, self.solution_range[1])
         return new_food_source
 
     
@@ -85,8 +86,9 @@ class ABC_solver:
             new_source = self.try_find_better_source(self.food_sources[i])
 
             new_fit = self.fitFunc(new_source)
+            current_fit = self.fitFunc(self.food_sources[i])
             # if new source is better, replace
-            if new_fit > self.fitFunc(self.food_sources[i]):
+            if new_fit > current_fit:
                 self.food_sources[i] = new_source
                 self.no_of_visits[i] = 0
                 if new_fit > self.bestSolutionFit:
